@@ -78,6 +78,10 @@ ipch/
 *.vsp
 *.vspx
 
+.vs
+
+appsettings.json
+
 # TFS 2012 Local Workspace
 $tf/
 
