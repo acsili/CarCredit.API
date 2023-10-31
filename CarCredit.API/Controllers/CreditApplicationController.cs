@@ -13,13 +13,11 @@ namespace CarCredit.API.Controllers
     [ApiController]
     public class CreditApplicationController : ControllerBase
     {
-        AppDbContext _dbContext;
-        IMapper _mapper;
+        private readonly AppDbContext _dbContext;
 
-        public CreditApplicationController(AppDbContext dbContext, IMapper mapper) 
+        public CreditApplicationController(AppDbContext dbContext) 
         {
             _dbContext = dbContext;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -48,7 +46,7 @@ namespace CarCredit.API.Controllers
         }
 
         [HttpGet]
-        [Route("{creditId:int}/credit/a")]
+        [Route("credit/by-credit/{creditId:int}")]
         public async Task<IActionResult> GetCreditApplicationByCreditId(int creditId)
         {
             var credit = await _dbContext.Credits.FindAsync(creditId);
@@ -68,7 +66,7 @@ namespace CarCredit.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{borrowerId:int}/credit")]
+        [HttpGet("credit/by-borrower/{borrowerId:int}")]
         public async Task<IActionResult> GetCreditApplicationsByBorrowerId(int borrowerId)
         {
             var borrower = await _dbContext.Borrowers.FindAsync(borrowerId);
