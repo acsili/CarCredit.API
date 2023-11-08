@@ -1,13 +1,13 @@
 ﻿namespace CarCredit.API.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : IEntity
     {
-        bool Create(T entity); 
+        Task<bool> Create(T entity);
 
-        T Get(int id);
+        Task<T> Get(int id);
 
         Task<IEnumerable<T>> GetAll();
 
-        bool Delete(T entity);
+        Task<bool> Delete(T entity);
     }
 }
