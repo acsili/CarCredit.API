@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CarCredit.API.Interfaces;
 using CarCredit.API.Models.Borrower.DTO;
 using CarCredit.API.Models.Borrower.Entity;
 using CarCredit.API.Models.Car.DTO;
@@ -13,23 +14,22 @@ namespace CarCredit.API.Controllers
     [ApiController]
     public class BorrowerController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IBorrowerRepository _borrowerRepository;
 
-        public BorrowerController(AppDbContext dbContext, IMapper mapper)
+        public BorrowerController(IMapper mapper, IBorrowerRepository borrowerRepository)
         {
-            _dbContext = dbContext;
             _mapper = mapper;
+            _borrowerRepository = borrowerRepository;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CeateBorrower(CreateBorrowerDto createBorrowerDto)
+        public async Task<IActionResult> CreateBorrower(CreateBorrowerDto createBorrowerDto)
         {
 
             var borrower = _mapper.Map<Borrower>(createBorrowerDto);
 
-            await _dbContext.Borrowers.AddAsync(borrower);
-            await _dbContext.SaveChangesAsync();
+            await _borrowerRepository.Create(borrower);
 
             var response = _mapper.Map<ReadBorrowerDto>(borrower);
 
@@ -41,7 +41,7 @@ namespace CarCredit.API.Controllers
         public async Task<IActionResult> GetAllBorrowers()
         {
 
-            var borrowers = await _dbContext.Borrowers.Select(b => b).ToArrayAsync();
+            var borrowers = await _borrowerRepository.GetAll();
 
             var response = _mapper.Map<ICollection<ReadBorrowerDto>>(borrowers);
 
