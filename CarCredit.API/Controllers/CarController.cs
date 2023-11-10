@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CarCredit.API.Interfaces;
 using CarCredit.API.Models.Car.DTO;
 using CarCredit.API.Models.Car.Entity;
 using Microsoft.AspNetCore.Http;
@@ -14,13 +15,15 @@ namespace CarCredit.API.Controllers
     public class CarController : ControllerBase
     {
 
-        private readonly AppDbContext _dbContext;
+        
         private readonly IMapper _mapper;
+        private readonly ICarRepository _carRepository;
 
-        public CarController(AppDbContext dbContext, IMapper mapper)
+
+        public CarController(IMapper mapper, ICarRepository carRepository)
         {
-            _dbContext = dbContext;
             _mapper = mapper;
+            _carRepository = carRepository; 
         }
 
         [HttpPost]
@@ -29,8 +32,7 @@ namespace CarCredit.API.Controllers
 
             var car = _mapper.Map<Car>(createCarDto);
 
-            await _dbContext.Cars.AddAsync(car);
-            await _dbContext.SaveChangesAsync();
+            await _carRepository.Create(car);
 
             var response = _mapper.Map<ReadCarDto>(car);
 
@@ -42,7 +44,7 @@ namespace CarCredit.API.Controllers
         public async Task<IActionResult> GetAllCars()
         {
 
-            var cars = await _dbContext.Cars.Select(c => c).ToArrayAsync();
+            var cars = await _carRepository.GetAll();
 
             var response = _mapper.Map<ICollection<ReadCarDto>>(cars);
 
