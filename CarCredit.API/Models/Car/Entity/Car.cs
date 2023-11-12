@@ -1,6 +1,8 @@
-﻿namespace CarCredit.API.Models.Car.Entity
+﻿using CarCredit.API.Interfaces;
+
+namespace CarCredit.API.Models.Car.Entity
 {
-    public class Car
+    public class Car : IEntity
     {
         public int Id { get; set; }
         public int CarTypeId { get; set; }

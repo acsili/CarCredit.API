@@ -1,6 +1,8 @@
-﻿namespace CarCredit.API.Models.Borrower.Entity
+﻿using CarCredit.API.Interfaces;
+
+namespace CarCredit.API.Models.Borrower.Entity
 {
-    public class Borrower
+    public class Borrower : IEntity
     {
         public int Id { get; set; }
         public string FullName { get; set; } = string.Empty;
